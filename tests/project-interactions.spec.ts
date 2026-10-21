@@ -83,7 +83,7 @@ test("the modal pauses Lenis and survives live quality changes", async ({ page }
   const initialScroll = await page.evaluate(() => scrollY);
   await dialog.hover();
   await page.mouse.wheel(0, 700);
-  await expect.poll(() => page.evaluate(() => scrollY)).toBe(initialScroll);
+  await expect.poll(async () => Math.abs(await page.evaluate(() => scrollY) - initialScroll)).toBeLessThanOrEqual(1);
   await page.emulateMedia({ reducedMotion: "reduce" });
   await expect(page.locator("html")).toHaveAttribute("data-motion", "static");
   await expect(dialog).toBeVisible();

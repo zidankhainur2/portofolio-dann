@@ -5,8 +5,9 @@ import { navigation, type ZoneId } from "@/data/navigation";
 import { useReducedMotion } from "@/hooks/useReducedMotion";
 import { usePerformanceTier } from "@/hooks/usePerformanceTier";
 import type { PortfolioStore } from "@/store/portfolioStore";
+import type { MotionRef } from "@/types/motion";
 
-export function ScrollExperience({ store }: { store: PortfolioStore }) {
+export function ScrollExperience({ store, motion }: { store: PortfolioStore; motion: MotionRef }) {
   const reducedMotion = useReducedMotion();
   const performanceTier = usePerformanceTier();
 
@@ -51,9 +52,10 @@ export function ScrollExperience({ store }: { store: PortfolioStore }) {
       root.dataset.motion = "loading";
       void import("@/lib/animation/scrollExperience").then(({ startScrollExperience }) => {
         if (disposed) return;
-        stopMotion = startScrollExperience(main, syncActiveZone);
-        stopNativeTracking();
+        // ScrollTrigger must measure the final layout and detect native smooth scrolling.
         root.dataset.motion = "ready";
+        stopMotion = startScrollExperience(main, syncActiveZone, store, motion);
+        stopNativeTracking();
         syncActiveZone();
       }).catch(() => {
         if (!disposed) root.dataset.motion = "unavailable";
@@ -67,7 +69,7 @@ export function ScrollExperience({ store }: { store: PortfolioStore }) {
       delete root.dataset.motion;
       delete root.dataset.performanceTier;
     };
-  }, [store, reducedMotion, performanceTier]);
+  }, [store, motion, reducedMotion, performanceTier]);
 
   return null;
 }

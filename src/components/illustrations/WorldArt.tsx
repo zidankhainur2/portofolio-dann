@@ -1,5 +1,4 @@
 // shortcut: development vector scenery, replace when approved final zone artwork is supplied.
-import { ShowcasePoster } from "@/components/illustrations/ShowcasePoster";
 
 export function GalaxyArt() {
   return (
@@ -73,7 +72,6 @@ export function OceanArt() {
   return (
     <>
       <div className="world-art ocean-art" aria-hidden="true">
-        <ShowcasePoster />
         <div className="ocean-rays" /><div className="ocean-suspended" />
         <svg className="marine-silhouettes" viewBox="0 0 240 160" width="240" height="160" focusable="false">
           <path d="M30 42q28-20 54 0-26 20-54 0L12 28v28ZM150 94q20-14 40 0-20 14-40 0l-12-10v20ZM96 130q14-10 28 0-14 10-28 0l-8-6v12Z" />

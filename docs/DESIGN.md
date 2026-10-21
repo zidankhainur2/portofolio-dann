@@ -318,6 +318,8 @@ Suggested relative behavior:
 
 These are design ratios, not mandatory literal implementation values.
 
+The implemented bounded travel presets are +160px far background, +100px background, +40px midground, zero content travel, and -120px foreground across section progress. Positive values counteract upward document movement; negative values accelerate it. Travel is capped at 20% viewport height and halved on tablet. Bunker uses 25% strength, Abyss 35%, and Seabed stays static. Connector contours use small, separately bounded offsets. Native touch scrolling and static mobile/reduced-motion/data-saver layouts take priority over decorative movement.
+
 ### 8.3 Scroll-Triggered Entrances
 
 Prefer:

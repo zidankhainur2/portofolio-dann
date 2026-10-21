@@ -30,6 +30,7 @@ interface ProjectContent {
   tech: string[];
   liveUrl?: string;
   caseStudy?: string;
+  banner?: { src: string; width: number; height: number };
 }
 
 export type Project = ProjectContent &

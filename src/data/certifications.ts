@@ -18,6 +18,7 @@ export const certifications: Certification[] = [
     featured: true,
     description:
       "Sertifikasi kompetensi yang mendukung kemampuan menyusun materi visual bergerak, storytelling, dan presentasi konten digital secara terstruktur.",
+    credentialId: "1937373860-127",
   },
   {
     id: "dicoding-dart",
@@ -27,6 +28,7 @@ export const certifications: Certification[] = [
     featured: true,
     description:
       "Sertifikasi kompetensi yang memperkuat pemahaman saya tentang bahasa pemrograman Dart, termasuk konsep dasar, struktur data, dan penerapan dalam pengembangan aplikasi.",
+    credentialId: "81P2VQKMNPOY",
   },
   {
     id: "revoU-software-engineering",
@@ -45,6 +47,7 @@ export const certifications: Certification[] = [
     featured: true,
     description:
       "Sertifikasi kompetensi yang mendukung kemampuan dalam pengembangan aplikasi web, termasuk pemahaman tentang HTML, CSS, dan JavaScript.",
+    credentialId: "0LZ04L710P65",
   },
   {
     id: "dicoding-javascript",
@@ -54,6 +57,7 @@ export const certifications: Certification[] = [
     featured: true,
     description:
       "Sertifikasi kompetensi yang mendukung kemampuan dalam pengembangan aplikasi web, termasuk pemahaman tentang HTML, CSS, dan JavaScript.",
+    credentialId: "1OP825ORQPQK",
   },
   {
     id: "dicoding-front-end-web",
@@ -63,6 +67,7 @@ export const certifications: Certification[] = [
     featured: true,
     description:
       "Sertifikasi kompetensi yang mendukung kemampuan dalam pengembangan aplikasi web terutama pada sisi front-end, termasuk pemahaman tentang HTML, CSS, dan JavaScript.",
+    credentialId: "6RPNR62D4X2M",
   },
   {
     id: "dicoding-react",
@@ -72,6 +77,7 @@ export const certifications: Certification[] = [
     featured: true,
     description:
       "Sertifikasi kompetensi yang mendukung kemampuan dalam pengembangan aplikasi web menggunakan React, termasuk pemahaman tentang komponen, state management, dan routing. ",
+    credentialId: "KEXL796YWXG2",
   },
   {
     id: "dicoding-ai",
@@ -81,9 +87,10 @@ export const certifications: Certification[] = [
     featured: true,
     description:
       "Sertifikasi kompetensi yang mendukung kemampuan dalam pengembangan aplikasi berbasis AI, termasuk pemahaman tentang machine learning, neural networks, dan natural language processing.",
+    credentialId: "MRZMN41YKPYQ",
   },
   {
-    id: "dts-javascript",
+    id: "dts-digital-marketing-ai",
     title:
       "Pemasaran Digital Menggunakan Kecerdasan Artifisial (Basic Digital Skill)",
     issuer: "Digital Talent Scholarship",
@@ -91,5 +98,6 @@ export const certifications: Certification[] = [
     featured: true,
     description:
       "Sertifikasi kompetensi yang mendukung kemampuan dalam menggunakan kecerdasan buatan untuk pemasaran digital, termasuk pemahaman tentang analisis data, optimisasi konten, dan strategi pemasaran berbasis AI.",
+    credentialId: "21712063860-147",
   },
 ];

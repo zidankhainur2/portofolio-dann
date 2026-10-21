@@ -1,5 +1,9 @@
 # Dependencies
 node_modules/
+.npm/
+
+# Local tooling caches
+.cache/
 
 # Generated Next.js and TypeScript output
 .next/
@@ -11,7 +15,9 @@ next-env.d.ts
 coverage/
 playwright-report/
 test-results/
+blob-report/
 playwright/.cache/
+playwright/.auth/
 
 # Environment variables and private keys (examples must contain no secrets)
 .env*
@@ -32,6 +38,9 @@ yarn-error.log*
 pnpm-debug.log*
 
 # Operating-system and editor temporary files
+.idea/
+.vscode/
+.history/
 .DS_Store
 Thumbs.db
 Desktop.ini

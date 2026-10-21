@@ -6,6 +6,21 @@
 **Document:** Engineering Architecture & Implementation Guide  
 **Status:** Implementation-ready draft
 
+## Implemented motion system (2026-10-20)
+
+The sections below retain the original design direction. The current implementation uses the following narrower ownership model:
+
+- `PortfolioProvider` owns the scoped Zustand store and a separate mutable `MotionRef`. Only discrete zone/project selection and rendering preferences enter Zustand; zone/connector/project progress stays in the ref.
+- `ScrollExperience` loads one animation lifecycle above 767px without reduced motion or data saver. One GSAP ticker drives Lenis (wheel smoothing, lerp 0.1); touch, keyboard, fragments, focus, and browser history retain native behavior. Dialogs stop/resume Lenis.
+- One scrubbed timeline per zone and connector owns decorative transforms and local fixed-color opacity crossfades. Background travel is positive (counteracting document motion), foreground travel is negative, tablet strength is halved, Bunker uses 25% strength, and Abyss 35%. Contact scenery stays static. No sections are pinned.
+- Grouped 350ms reveals skip already visible/deep-linked content, complete on keyboard focus, and revert with the lifecycle. SVG transform attributes are restored explicitly during teardown.
+- Flagship selection follows the article at 45% viewport height, in both directions. Boundaries are measured on refresh. Explicit selection persists until another boundary; focus inside a project or an open dialog takes precedence. Utilities remain interaction-selected.
+- A desktop-only sticky showcase rail ends with the flagship list. Tablet keeps the introductory showcase; static modes retain the linear content layout.
+- `WorldScene` reads progress refs and mutates inner narrative groups in its demand-driven frame callback; outer groups fit DOM anchors. Planet departure, connector-only capsule tilt/fade, and showcase progress use this bridge. Canvas invalidation is registered/cleared by the scene. No continuous render loop or per-frame React state is added.
+- Cleanup reverts timelines, resets progress, removes ticker/listeners/observers, destroys Lenis, and preserves posters, native disclosures, and all server-rendered content. The original example store shape below is conceptual; do not introduce its continuous `globalScrollProgress` field.
+- Project banners are server-rendered with `next/image`, actual intrinsic dimensions, responsive `sizes`, lazy loading, and their full aspect ratio. They belong to the article reading plane, not the dialog or canvas. Supplied credential IDs appear on cards and in details; IDs do not imply a verification URL.
+- Reserved image dimensions avoid load-driven layout changes. The existing `ResizeObserver` handles content size changes; safe ScrollTrigger refresh waits for scrolling to settle instead of refreshing on every image load or dialog toggle. Native navigation cancels Lenis inertia through stop/start, preserving an existing dialog lock.
+
 ---
 
 ## 1. Architecture Goals

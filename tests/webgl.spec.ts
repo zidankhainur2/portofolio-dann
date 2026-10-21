@@ -88,3 +88,34 @@ test("reduced motion, mobile, and no JavaScript retain static visuals", async ({
     await expect(page.locator("canvas")).toHaveCount(0);
   }
 });
+
+test("the shared scene redraws on scroll and becomes idle after settling", async ({ page }, testInfo) => {
+  test.skip(testInfo.project.name !== "desktop", "Instruments the desktop demand renderer.");
+  await page.addInitScript(() => {
+    const counters = { draws: 0 };
+    Object.assign(window, { motionDraws: counters });
+    for (const prototype of [WebGLRenderingContext.prototype, WebGL2RenderingContext.prototype]) {
+      const draw = prototype.drawElements;
+      prototype.drawElements = function(...args) {
+        counters.draws++;
+        return Reflect.apply(draw, this, args);
+      };
+    }
+  });
+  await page.emulateMedia({ reducedMotion: "no-preference" });
+  await page.goto("/");
+  await expect(page.locator('.world-canvas[data-state="ready"]')).toBeVisible({ timeout: 20_000 });
+  const draws = () => page.evaluate(() => (window as Window & { motionDraws?: { draws: number } }).motionDraws!.draws);
+  await expect.poll(draws).toBeGreaterThan(0);
+  // Demand rendering needs a short settling interval, not a permanent frame loop.
+  await page.waitForTimeout(1200);
+  const idle = await draws();
+  await page.waitForTimeout(300);
+  expect(await draws()).toBe(idle);
+  await page.evaluate(() => scrollTo({ top: 300, behavior: "instant" }));
+  await expect.poll(draws).toBeGreaterThan(idle);
+  await page.waitForTimeout(1200);
+  const settled = await draws();
+  await page.waitForTimeout(300);
+  expect(await draws()).toBe(settled);
+});

@@ -31,6 +31,11 @@ test("research and credentials expose supplied metadata and explicit pending mat
     } else await expect(article.getByRole("link")).toHaveCount(0);
   }
   await expect(research.locator(".featured-certificate")).toHaveCount(featuredCount);
+  for (const certificate of certifications) {
+    const cardId = page.locator(`#certificate-${certificate.id} .certificate-body > .credential-id`);
+    if (certificate.credentialId) await expect(cardId).toHaveText(`ID kredensial: ${certificate.credentialId}`);
+    else await expect(cardId).toHaveCount(0);
+  }
   await expect(research.getByRole("heading", { name: "Junior Graphic Designer", exact: true })).toBeVisible();
   await expect(research.getByRole("heading", { name: "Video Editor", exact: true })).toBeVisible();
   if (technicalCertificates.length === 0) await expect(research.locator(".credential-empty")).toContainText("sedang disiapkan");
@@ -65,6 +70,7 @@ test("credential details preserve native access and modal focus behavior", async
   await page.emulateMedia({ reducedMotion: "reduce" });
   await page.goto("/#research");
   for (const id of ["bnsp-graphic-design", "bnsp-video-editor"]) {
+    const data = certifications.find((certificate) => certificate.id === id)!;
     const certificate = page.locator(`#certificate-${id}`);
     const trigger = certificate.locator("summary");
     await trigger.focus();
@@ -72,13 +78,15 @@ test("credential details preserve native access and modal focus behavior", async
     if (testInfo.project.use.javaScriptEnabled === false) {
       await expect(page.locator(".certification-filters")).toBeHidden();
       await expect(certificate.locator("details")).toHaveAttribute("open", "");
-      await expect(certificate.locator(".case-study-copy")).toContainText("Menunggu verifikasi");
+      await expect(certificate.locator(".case-study-copy dl")).toContainText(data.credentialId ?? "Menunggu verifikasi");
       await expect(certificate.locator(".case-study-copy")).toBeVisible();
       await page.keyboard.press("Enter");
     } else {
       const dialog = certificate.getByRole("dialog");
       await expect(dialog).toBeVisible();
       await expect(dialog).toContainText("BNSP");
+      await expect(dialog.locator("dl")).toContainText(data.credentialId ?? "Menunggu verifikasi");
+      await expect(dialog).not.toContainText("Tidak ada ID atau tautan verifikasi");
       await expect(dialog).toContainText("Detail LSP menunggu verifikasi");
       await expect(dialog).toContainText("Pratinjau sertifikat belum tersedia");
       await expect(dialog.getByRole("button", { name: "Tutup detail kredensial" })).toBeFocused();

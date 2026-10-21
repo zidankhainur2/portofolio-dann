@@ -8,7 +8,13 @@
 #main { position: relative; isolation: isolate; }
 .zone { --world-edge: clamp(12px, calc((100vw - 1184px) / 2 - 32px), 140px); }
 .zone > .container { position: relative; z-index: var(--z-content); }
-.zone::after { content: ""; position: absolute; inset: 0; z-index: 0; pointer-events: none; background: var(--zone-tint, transparent); opacity: var(--zone-tint-opacity, 0); mask-image: linear-gradient(transparent, black 25%, black 75%, transparent); }
+.zone::after { content: ""; position: absolute; inset: 0; z-index: 0; pointer-events: none; background: var(--environment-color, transparent); opacity: var(--environment-opacity, 0); mask-image: linear-gradient(transparent, black 25%, black 75%, transparent); }
+.galaxy { --environment-color: #1e1136; }
+.sky { --environment-color: #d96b62; }
+.bunker { --environment-color: #231123; }
+.ocean { --environment-color: #050d38; }
+.abyss { --environment-color: #094074; }
+.galaxy::before { transform: translateY(var(--stars-y, 0px)); }
 .world-art { position: absolute; inset: 0; z-index: var(--z-background-art); overflow: hidden; pointer-events: none; user-select: none; }
 .world-art :where(svg) { display: block; }
 .world-foreground { z-index: var(--z-foreground-art); }
@@ -32,8 +38,8 @@
 .orbital-track { position: absolute; bottom: 10px; right: 5%; width: 44%; height: 150px; stroke: #aa8dbb; stroke-width: .7; opacity: .25; }
 .sky-sun { position: absolute; right: -60px; top: 70px; width: 390px; aspect-ratio: 1; border-radius: 50%; border: 1px solid rgb(255 209 162 / 16%); background: radial-gradient(circle at 45% 40%, rgb(240 177 150 / 15%), rgb(229 144 133 / 5%) 65%, transparent); }
 .cloud-bank { position: absolute; width: 100%; mask-image: linear-gradient(black 65%, transparent); }
-.cloud-far { top: -50px; height: 250px; fill: #bba3c4; opacity: .13; }
-.cloud-mid { top: 45%; height: 240px; fill: #dfb5c4; opacity: .08; }
+.cloud-far { top: -50px; height: 250px; fill: #bba3c4; opacity: .2; }
+.cloud-mid { top: 45%; height: 240px; fill: #dfb5c4; opacity: .14; }
 .cloud-near { bottom: -1px; height: 130px; fill: #d96b62; opacity: .2; }
 .about-copy { padding: 28px; background: rgb(35 17 35 / 58%); border-left: 1px solid #b38aa4; }
 
@@ -77,6 +83,20 @@
 .capsule-anchor { position: absolute; top: 5%; right: 19%; width: 72px; height: 90%; }
 .project-showcase-anchor { position: absolute; top: 520px; left: max(56px, calc((100% - 1184px) / 2)); width: 280px; height: 240px; }
 .showcase-caption { display: block; text-align: center; color: #c8c5e1; font: 11px var(--font-mono); }
+html[data-motion="ready"] .galaxy::before { inset-block: -80px; }
+html[data-motion="ready"] .cloud-near { bottom: -65px; height: 260px; }
+html[data-motion="ready"] .bunker-wall { inset: -60px; }
+html[data-motion="ready"] .world-edge { top: -80px; height: calc(100% + 160px); }
+html[data-motion="ready"] .zone-connector > svg { position: absolute; top: -24px; height: calc(100% + 48px); }
+.showcase-rail { position: absolute; top: 520px; left: 0; width: 280px; pointer-events: none; }
+.showcase-rail .project-showcase-anchor { top: 0; left: 0; }
+@media (min-width: 1024px) {
+  html[data-motion="ready"] .flagship-stage { display: grid; grid-template-columns: clamp(160px, 22vw, 260px) minmax(0, 1fr); gap: 64px; }
+  html[data-motion="ready"] .showcase-rail { position: relative; top: auto; left: auto; width: auto; }
+  html[data-motion="ready"] .project-showcase-anchor { position: sticky; top: max(120px, calc(50svh - 120px)); left: auto; width: 100%; }
+  html[data-motion="ready"] .flagship-project { display: block; }
+  html[data-motion="ready"] .flagship-project .project-body { margin-top: 24px; }
+}
 @media (min-width: 768px) and (prefers-reduced-motion: no-preference) {
   #main:has(.world-canvas[data-state="ready"]) .planet { background: none; box-shadow: none; }
   #main:has(.world-canvas[data-state="ready"]) .scene-poster { opacity: 0; }
@@ -88,13 +108,14 @@
 
 @media (min-width: 768px) and (max-width: 1023px) {
   .project-showcase-anchor { left: 32px; width: 130px; height: 160px; }
+  .showcase-rail { width: 130px; }
 }
 
 @media (max-width: 1023px) {
   .practical-light { display: none; }
   .marine-silhouettes { width: 150px; opacity: .15; }
   .abyss-jellyfish { width: 64px; opacity: .16; }
-  .cloud-mid { opacity: .05; }
+  .cloud-mid { opacity: .09; }
 }
 
 @media (max-width: 767px) {

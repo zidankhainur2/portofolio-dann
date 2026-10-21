@@ -4,7 +4,7 @@ A content-first portfolio following a journey from orbit to the abyss. Built wit
 
 ## Run locally
 
-Use Node.js 22 or newer and npm:
+Use Node.js 24 (the default in `.nvmrc`) and npm. The supported minimum is Node.js 22. If you use nvm, select the version from `.nvmrc` before installing dependencies.
 
 ```sh
 npm ci
@@ -12,6 +12,14 @@ npm run dev
 ```
 
 Open http://localhost:3000.
+
+## Environment and Git
+
+The application currently needs no `.env` file, API keys, or external services to run. The test configuration uses the optional `CI` variable to adjust workers, retries, and focused-test checks.
+
+Keep `package-lock.json` in Git and use `npm ci` for reproducible dependency installs. Build output, dependencies, test reports, local caches, editor settings, logs, and private `.env*` files are ignored. `next-env.d.ts` and TypeScript build information are generated locally and are also ignored. If environment variables become necessary, document their names with placeholder values in `.env.example`; never put secrets in that file. See the [Next.js environment-variable guide](https://nextjs.org/docs/app/guides/environment-variables).
+
+`.gitattributes` keeps text files on LF line endings across operating systems and detects binary assets automatically. Keep application source, configuration, documentation, tests, and approved `public/` assets in Git. Review `git status --short` and `git diff --check` before committing.
 
 ## Validate
 

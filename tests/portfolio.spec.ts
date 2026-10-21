@@ -2,6 +2,7 @@ import { test, expect } from "@playwright/test";
 import { certifications } from "../src/data/certifications";
 import { profile } from "../src/data/profile";
 import { publications } from "../src/data/publications";
+import { projects } from "../src/data/projects";
 
 const sections = ["home", "about", "experience", "projects", "research", "contact"];
 
@@ -93,7 +94,8 @@ test("responsive and reduced-motion layouts do not overflow or hide content", as
 
 test("the illustrated world preserves content access with or without decoration", async ({ page }, testInfo) => {
   await page.goto("/");
-  await expect(page.getByRole("img")).toHaveCount(0);
+  await expect(page.locator("#projects .project-banner")).toHaveCount(projects.filter((project) => project.banner).length);
+  await expect(page.locator('.world-art img:not([aria-hidden="true"])')).toHaveCount(0);
   if (page.viewportSize()!.width < 768) {
     for (const selector of [".cloud-mid", ".marine-silhouettes", ".abyss-jellyfish", ".seabed-shell"]) {
       await expect(page.locator(selector)).toBeHidden();
@@ -131,4 +133,55 @@ test("the illustrated world preserves content access with or without decoration"
     await page.getByRole("button", { name: "Tutup detail proyek" }).click();
   }
   expect(await page.evaluate(() => document.documentElement.scrollWidth <= window.innerWidth)).toBe(true);
+});
+
+test("project banners load responsively with their full aspect ratio and native fallbacks", async ({ page }, testInfo) => {
+  await page.emulateMedia({ reducedMotion: "reduce" });
+  await page.goto("/#projects");
+  for (const project of projects) {
+    const image = page.locator(`#project-${project.id} .project-banner`);
+    if (!project.banner) { await expect(image).toHaveCount(0); continue; }
+    await expect(image).toHaveAttribute("alt", `Pratinjau proyek ${project.title}`);
+    await expect(image).toHaveAttribute("loading", "lazy");
+    await expect(image).toHaveAttribute("width", String(project.banner.width));
+    await expect(image).toHaveAttribute("height", String(project.banner.height));
+    await expect(image).toHaveAttribute("sizes", /calc\(100vw - 40px\)/);
+    await image.scrollIntoViewIfNeeded();
+    await expect.poll(() => image.evaluate((element) => (element as HTMLImageElement).complete && (element as HTMLImageElement).naturalWidth > 0)).toBe(true);
+    const dimensions = await image.evaluate((element) => {
+      const image = element as HTMLImageElement;
+      const bounds = image.getBoundingClientRect();
+      return { width: bounds.width, height: bounds.height, src: new URL(image.currentSrc).searchParams.get("url"), objectFit: getComputedStyle(image).objectFit };
+    });
+    expect(dimensions.src).toBe(project.banner.src);
+    expect(dimensions.width / dimensions.height).toBeCloseTo(project.banner.width / project.banner.height, 1);
+    expect(dimensions.objectFit).not.toBe("cover");
+    await expect(page.locator(`#project-${project.id} .project-body > h3`)).toHaveText(project.title);
+  }
+  await page.locator("#project-savebill").screenshot({ path: testInfo.outputPath("project-banner.png") });
+  await testInfo.attach("banner-resources.json", {
+    body: JSON.stringify(await page.evaluate(() => performance.getEntriesByType("resource").filter((entry) => entry.name.includes("/_next/image?")).map((entry) => {
+      const resource = entry as PerformanceResourceTiming;
+      return { url: resource.name, encodedBytes: resource.encodedBodySize, decodedBytes: resource.decodedBodySize };
+    }))), contentType: "application/json",
+  });
+  await page.setViewportSize({ width: 320, height: 568 });
+  expect(await page.locator(".project-banner").evaluateAll((elements) => elements.every((element) => element.getBoundingClientRect().width <= innerWidth))).toBe(true);
+  expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(true);
+});
+
+test("failed project images preserve layout, descriptions, and project actions", async ({ page }, testInfo) => {
+  test.skip(testInfo.project.name !== "desktop", "One controlled image failure check is sufficient.");
+  await page.emulateMedia({ reducedMotion: "reduce" });
+  await page.route("**/_next/image?**", (route) => route.abort());
+  await page.goto("/#projects");
+  const article = page.locator("#project-savebill");
+  const image = article.locator(".project-banner");
+  await image.scrollIntoViewIfNeeded();
+  await expect.poll(() => image.evaluate((element) => (element as HTMLImageElement).complete)).toBe(true);
+  expect(await image.evaluate((element) => (element as HTMLImageElement).naturalWidth)).toBe(0);
+  expect((await image.boundingBox())!.height).toBeGreaterThan(100);
+  await expect(article.getByRole("heading", { name: "SaveBill", exact: true })).toBeVisible();
+  await expect(article).toContainText(projects[0].description);
+  await expect(article.getByRole("link", { name: /Lihat Source Code/ })).toHaveAttribute("href", projects[0].repositoryUrl!);
 });

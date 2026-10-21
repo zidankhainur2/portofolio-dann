@@ -3,6 +3,11 @@ import type { Project } from "@/types/portfolio";
 export const projects: Project[] = [
   {
     id: "savebill",
+    banner: {
+      src: "/assets/project-banner/savebill.png",
+      width: 1901,
+      height: 989,
+    },
     title: "SaveBill",
     subtitle: "AI-Powered Electricity Bill Analyzer",
     category: "Full-Stack Web & AI",
@@ -17,6 +22,11 @@ export const projects: Project[] = [
   },
   {
     id: "eventsika",
+    banner: {
+      src: "/assets/project-banner/eventsika.webp",
+      width: 2848,
+      height: 1504,
+    },
     title: "EventSika",
     subtitle: "Campus Event Recommendation Platform",
     category: "Recommendation System / Web Platform",
@@ -39,6 +49,11 @@ export const projects: Project[] = [
   },
   {
     id: "loghub",
+    banner: {
+      src: "/assets/project-banner/loghub.png",
+      width: 1903,
+      height: 960,
+    },
     title: "LogHub",
     subtitle: "Internship Activity Management",
     category: "Productivity Web App",
@@ -54,6 +69,11 @@ export const projects: Project[] = [
   },
   {
     id: "vymo",
+    banner: {
+      src: "/assets/project-banner/vymo.png",
+      width: 1919,
+      height: 990,
+    },
     title: "VYMO",
     subtitle: "Real-Time Facial Expression Classification",
     category: "Computer Vision & Web Integration",
@@ -73,6 +93,11 @@ export const projects: Project[] = [
   },
   {
     id: "money-note",
+    banner: {
+      src: "/assets/project-banner/money-note.png",
+      width: 1904,
+      height: 961,
+    },
     title: "Money-Note",
     subtitle: "Personal Finance & Expense Tracker",
     category: "Financial Web App",
@@ -86,6 +111,11 @@ export const projects: Project[] = [
   },
   {
     id: "gridify",
+    banner: {
+      src: "/assets/project-banner/gridify.png",
+      width: 1897,
+      height: 962,
+    },
     title: "Gridify",
     category: "Web Tool / Visual Utility",
     visibility: "public",
@@ -98,6 +128,11 @@ export const projects: Project[] = [
   },
   {
     id: "download-organizer-pro",
+    banner: {
+      src: "/assets/project-banner/download-organizer-pro.png",
+      width: 1919,
+      height: 963,
+    },
     title: "Download Organizer Pro",
     category: "Automation & File Utility",
     visibility: "public",

@@ -1,3 +1,4 @@
+import Image from "next/image";
 import type { Project } from "@/types/portfolio";
 import { TechList } from "@/components/ui/TechList";
 import { ProjectInteraction } from "@/components/projects/ProjectInteraction";
@@ -14,6 +15,15 @@ export function ProjectArticle({ project, index }: { project: Project; index: nu
         <p className="project-category">{project.category}</p>
         <h3 id={`${project.id}-title`}>{project.title}</h3>
         {project.subtitle && <p className="project-subtitle">{project.subtitle}</p>}
+        {project.banner && <Image
+          className="project-banner"
+          src={project.banner.src}
+          width={project.banner.width}
+          height={project.banner.height}
+          alt={`Pratinjau proyek ${project.title}`}
+          sizes={`(max-width: 767px) calc(100vw - 40px), (max-width: 1023px) calc(100vw - 246px), ${project.featured ? "860px" : "374px"}`}
+          loading="lazy"
+        />}
         <p>{project.description}</p>
         <TechList tech={project.tech} />
         <div className="project-actions">

@@ -1,0 +1,2 @@
+# Keep text consistent across Windows, macOS, and Linux; detect binaries automatically.
+* text=auto eol=lf
